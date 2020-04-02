@@ -1,0 +1,17 @@
+const connection = require('../database/connection');
+const crypto = require('crypto');
+
+module.exports = {
+    async create(request,response){
+        const {id} = request.body; 
+        
+        const ong = await connection('Ongs')
+            .where('id',id)
+            .select('name')
+            .first();
+        
+        if(!ong) response.status(400).json({error:'No ONG found with this ID'});
+        
+        return response.json(ong);
+    },
+}
