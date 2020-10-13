@@ -1,15 +1,27 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import logoImg from '../../assets/logo.svg';
 import {Link} from 'react-router-dom';
 import {FiPower,FiTrash2} from 'react-icons/fi';
 import './styles.css';
+import api from '../../services/api';
 
 export default function Profile(){
+    const [insidents,setInsidents] = useState([]);
+
+    const ongName = localStorage.getItem('ongName');
+    const ongId = localStorage.getItem('ongId');
+
+    useEffect(()=>{
+        api.get('profile',{
+            headers:{Authorization:ongId,}
+        }).then(response=>{setInsidents(response.data)})
+    },[ongId]);
+
     return (
          <div className="profile-container">
              <header>
                  <img src={logoImg} alt="be the hero"/>
-                 <span>Bem vinda, APAD !</span>
+                 <span>Bem vinda, {ongName} !</span>
 
                  <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
                  <button type="button">
